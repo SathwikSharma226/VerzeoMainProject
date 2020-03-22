@@ -1,0 +1,89 @@
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+const int ldrPin = A0;
+const int ledPin = D1;
+
+void setup () {
+  
+//  char ledStatus = '0';
+//  char ledStatus = '0';
+  pinMode(D1,OUTPUT);
+  pinMode(A0,INPUT);
+  
+  Serial.begin(9600);
+  char ssid[] = "Amrutha";
+  char pass[] = "amrutha1234";
+  WiFi.begin(ssid,pass);
+  Serial.println("Connecting..");
+  while (WiFi.status() != WL_CONNECTED) {
+  delay(1000);
+  Serial.println("Connecting..");
+
+  }
+  Serial.println("Connected to WiFi Network");
+
+}
+
+void loop() {
+
+    int ldrValue = analogRead(ldrPin);
+    int bulb;
+
+    if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
+   
+        HTTPClient http;  //Declare an object of class HTTPClient
+  
+        http.begin("http://pesce-streetlamp-demo.herokuapp.com/lamp001"); //Specify request destination
+  
+        int httpCode = http.GET(); //Send the request
+        //Serial.println(httpCode);
+        //Serial.println(http.getString());
+  
+        if (httpCode > 0) { //Check the returning code
+  
+          String payload =http.getString(); 
+          char ledStatus = payload[0];
+          char ldrStatus = payload[1];
+          Serial.println();
+          Serial.println(ledStatus);
+          Serial.println(ldrStatus);
+          Serial.println(ldrValue);
+   
+          if (ldrStatus =='1') {
+
+            if ( ledStatus =='0' ) {
+              bulb=0;
+            }else{
+  
+              if(ldrValue<=2 00){
+                  bulb=1;
+                  Serial.println("LDR is DARK, LED is ON");
+              }
+            }
+          }else{
+
+            if ( ledStatus =='0' ) {
+              bulb=0;
+            }
+
+            if ( ledStatus =='1' ) {
+              bulb=1;
+            }
+            
+          }
+   
+          //Serial.println(payload);             //Print the response payload
+
+          if(bulb==1)
+            digitalWrite(D1, HIGH);
+          else
+            digitalWrite(D1, LOW);
+          
+          delay(100);
+  
+      }else Serial.println("An error ocurred");
+  
+      http.end();   //Close connection
+      }
+  }

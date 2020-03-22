@@ -1,0 +1,91 @@
+int redLed = 2;
+int greenLed = 3;
+int blueLed = 4;
+
+int value = A0;
+int red;
+int blue;
+int green;
+
+int redValue;
+int greenValue;
+int blueValue;
+
+int redOut = 8;
+int blueOut = 10;
+int greenOut = 9;
+
+void setup()
+{
+  pinMode(redLed, OUTPUT);
+  pinMode(greenLed, OUTPUT);
+  pinMode(blueLed, OUTPUT);
+
+  pinMode(value, INPUT);
+
+  pinMode(redOut, OUTPUT);
+  pinMode(greenOut, OUTPUT);
+  pinMode(blueOut, OUTPUT);
+
+  Serial.begin(9600);
+
+}
+
+void loop()
+{
+  digitalWrite(redLed,HIGH);
+  delay(40);
+  red = analogRead(value);
+  delay(10);
+  Serial.print("R = ");
+  Serial.println(red);
+  digitalWrite(redLed,LOW);
+
+  digitalWrite(greenLed,HIGH);
+  delay(40);
+  green = analogRead(value);
+  delay(10);
+  Serial.print("G = ");
+  Serial.println(green);
+  digitalWrite(greenLed,LOW);
+
+  digitalWrite(blueLed,HIGH);
+  delay(40);
+  blue = analogRead(value);
+  delay(10);
+  Serial.print("B = ");
+  Serial.println(blue);
+  digitalWrite(blueLed,LOW);
+
+  if(red>green && red>blue)
+  {
+    red = HIGH;
+  }
+  else
+  {
+    red = LOW
+  }
+
+  if(green>red && green>blue)
+  {
+    green = HIGH;
+  }
+  else
+  {
+    green = LOW
+  }
+
+  if(blue>green && blue>green)
+  {
+    blue = HIGH;
+  }
+  else
+  {
+    blue = LOW
+  }
+
+  digitalWrite(redOut,redValue);
+  digitalWrite(greenOut,greenValue);
+  digitalWrite(blueOut,blueValue);
+}
+
